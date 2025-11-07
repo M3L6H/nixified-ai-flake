@@ -1,0 +1,17 @@
+--- a/py/server/utils_info.py
++++ b/py/server/utils_info.py
+@@ -413,9 +413,11 @@
+ 
+ def get_folder_path(file: str, model_type) -> str | None:
+   """Gets the file path ensuring it exists."""
+-  file_path = folder_paths.get_full_path(model_type, file)
+-  if file_path and not file_exists(file_path):
+-    file_path = os.path.abspath(file_path)
++  file_path = os.path.join(os.path.expanduser("~/.config/rgthree"), model_type, file)
++  src_file_path = folder_paths.get_full_path(model_type, file)
++  if not file_exists(file_path) and file_exists(src_file_path):
++    os.makedirs(os.path.dirname(file_path), exist_ok=True)
++    os.symlink(src_file_path, file_path)
+   if not file_exists(file_path):
+     file_path = None
+   return file_path

@@ -1,0 +1,14 @@
+--- a/py/utils_userdata.py
++++ b/py/utils_userdata.py
+@@ -2,8 +2,9 @@
+ 
+ from .utils import load_json_file, path_exists, save_json_file
+ 
+-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+-USERDATA = os.path.join(THIS_DIR, '..', 'userdata')
++CONFIG_DIR = os.path.expanduser("~/.config/rgthree")
++USERDATA = os.path.join(CONFIG_DIR, 'userdata')
++os.makedirs(USERDATA, exist_ok=True)
+ 
+ 
+ def read_userdata_file(rel_path: str):
