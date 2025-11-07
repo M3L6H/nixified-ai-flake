@@ -1,0 +1,24 @@
+--- a/py/config.py
++++ b/py/config.py
+@@ -1,5 +1,6 @@
+ import os
+ import json
++import shutil
+ 
+ from .utils import get_dict_value, set_dict_value, dict_has_key, load_json_file
+ from .pyproject import VERSION
+@@ -51,8 +52,12 @@
+ 
+ 
+ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+-DEFAULT_CONFIG_FILE = os.path.join(THIS_DIR, '..', 'rgthree_config.json.default')
+-USER_CONFIG_FILE = os.path.join(THIS_DIR, '..', 'rgthree_config.json')
++CONFIG_DIR = os.path.expanduser("~/.config/rgthree")
++os.makedirs(CONFIG_DIR, exist_ok=True)
++DEFAULT_CONFIG_FILE = os.path.join(CONFIG_DIR, 'rgthree_config.json.default')
++if not os.path.exists(DEFAULT_CONFIG_FILE):
++  shutil.copy(os.path.join(THIS_DIR, "..", "rgthree_config.json.default"), CONFIG_DIR)
++USER_CONFIG_FILE = os.path.join(CONFIG_DIR, 'rgthree_config.json')
+ 
+ DEFAULT_CONFIG = {}
+ USER_CONFIG = {}

@@ -1,0 +1,17 @@
+--- a/py/server/routes_model_info.py
++++ b/py/server/routes_model_info.py
+@@ -135,9 +135,11 @@
+ 
+   model_type = request.match_info['type']
+   file_param = get_param(request, 'file')
+-  file_path = folder_paths.get_full_path(model_type, file_param)
+-  if not path_exists(file_path):
+-    file_path = os.path.abspath(file_path)
++  file_path = os.path.join(os.path.expanduser("~/.config/rgthree"), model_type, file_param)
++  src_file_path = folder_paths.get_full_path(model_type, file_param)
++  if not path_exists(file_path) and path_exists(src_file_path):
++    os.makedirs(os.path.dirname(file_path), exist_ok=True)
++    os.symlink(src_file_path, file_path)
+ 
+   img_path = None
+   for ext in ['jpg', 'png', 'jpeg']:
